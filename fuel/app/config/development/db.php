@@ -6,9 +6,9 @@
 return array(
 	'default' => array(
 		'connection'  => array(
-			'dsn'        => 'mysql:host=localhost:8889;dbname=musicAppDpa',
-			'username'   => 'root',
-			'password'   => 'root',
+			'dsn'        => 'mysql:host=localhost;dbname=appMusic',
+			'username'   => 'alumnos',
+			'password'   => 'cev',
 		),
 	),
 );
