@@ -10,7 +10,7 @@ class Controller_Users extends Controller_Rest
     public function post_create()
     {
         try {
-            if ( ! isset($_POST['name']) || ! isset($_POST['password'])) 
+            if ( ! isset($_POST['name']) || ! isset($_POST['password']))
             {
                 $json = $this->response(array(
                     'code' => 400,
