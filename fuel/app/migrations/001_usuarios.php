@@ -8,7 +8,7 @@ class Usuarios
 		\DBUtil::create_table('usuarios', array(
             'id' => array('type' => 'int', 'constraint' => 11, 'auto_increment' => true),
             'nombre' => array('type' => 'varchar', 'constraint' => 100),
-            //'email' => array('type' => 'varchar', 'constraint' => 100),
+            'email' => array('type' => 'varchar', 'constraint' => 100),
             'password' => array('type' => 'varchar', 'constraint' => 100)
         ), array('id'));
 	}

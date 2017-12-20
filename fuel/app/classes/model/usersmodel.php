@@ -11,6 +11,9 @@ class Model_Usersmodel extends Orm\Model
         ),
         'password' => array(
         	'data_type' => 'varchar'
+        ),
+        'email' => array(
+            'data_type' => 'varchar'
         )
     );
 

@@ -10,7 +10,7 @@ class Controller_Users extends Controller_Rest
     public function post_create()
     {
         try {
-            if ( ! isset($_POST['name']) || ! isset($_POST['password']))
+            if ( ! isset($_POST['name']) || ! isset($_POST['password']) || ! isset($_POST['email']))
             {
                 $json = $this->response(array(
                     'code' => 400,
@@ -18,12 +18,61 @@ class Controller_Users extends Controller_Rest
                 ));
 
                 return $json;
-            }
+            } 
+                
+            
 
             $input = $_POST;
-            $user = new Model_Usersmodel();
+            $users = Model_Usersmodel::find('all');
+
+            foreach ($users as $key => $user) {
+                if ($input['name'] == $user->nombre) {
+                    
+                    $json = $this->response(array(
+                        'code' => 400,
+                        'message' => 'ese nombre ya figura en la lista'
+                    ));
+
+                    return $json;    
+                }
+            }
+            foreach ($users as $key => $user) {
+                if ($input['email'] == $user->email) {
+                    
+                    $json = $this->response(array(
+                        'code' => 400,
+                        'message' => 'ese email ya figura en la lista'
+                    ));
+
+                    return $json;    
+                }
+            }
+
+            /*for ($i=0; $i < count($user); $i++) 
+            { 
+                if ($input['name'] == $i->name) 
+                {
+                    $json = $this->response(array(
+                        'code' => 400,
+                        'message' => 'ese nombre ya figura en la lista'
+                    ));
+
+                    return $json;    
+                }
+                elseif ($input['email'] == $i->email) 
+                {
+                        $json = $this->response(array(
+                        'code' => 400,
+                        'message' => 'ese email ya figura en la lista'
+                    ));
+
+                    return $json;  
+                }
+            }*/
+            $user = new Model_Usersmodel(); 
             $user->nombre = $input['name'];
             $user->password = $input['password'];
+            $user->email = $input['email'];
             $user->save();
 
             $json = $this->response(array(
@@ -39,7 +88,7 @@ class Controller_Users extends Controller_Rest
         {
             $json = $this->response(array(
                 'code' => 500,
-                'message' => 'error interno del servidor',
+                'message' => $e->getMessage(),
             ));
 
             return $json;

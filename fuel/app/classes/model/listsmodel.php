@@ -24,8 +24,7 @@ class Model_listsmodel extends Orm\Model
     )
 );
 
-     // in a Model_Post which has and belongs to many Users
-// = multiple posts per user and multiple users (authors) per post
+     
 protected static $_many_many = array(
     'songs' => array(
         'key_from' => 'id',
