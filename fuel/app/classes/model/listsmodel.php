@@ -1,6 +1,6 @@
 <?php 
 
-class Model_listsmodel extends Orm\Model
+class Model_Listsmodel extends Orm\Model
 {
     protected static $_table_name = 'lists';
     protected static $_primary_key = array('id');
@@ -14,6 +14,7 @@ class Model_listsmodel extends Orm\Model
         )
         
     );
+    //esto está bien
     protected static $_belongs_to = array(
     'users' => array(
         'key_from' => 'id_usuario',
@@ -24,14 +25,14 @@ class Model_listsmodel extends Orm\Model
     )
 );
 
-     
+   
 protected static $_many_many = array(
     'songs' => array(
         'key_from' => 'id',
-        'key_through_from' => 'id_song', // column 1 from the table in between, should match a posts.id
+        'key_through_from' => 'id_list', // column 1 from the table in between, should match a posts.id
         'table_through' => 'content', // both models plural without prefix in alphabetical order
-        'key_through_to' => 'id_list', // column 2 from the table in between, should match a users.id
-        'model_to' => 'Model_listsmodel',
+        'key_through_to' => 'id_song', // column 2 from the table in between, should match a users.id
+        'model_to' => 'Model_songsmodel',
         'key_to' => 'id',
         'cascade_save' => false,
         'cascade_delete' => false,
