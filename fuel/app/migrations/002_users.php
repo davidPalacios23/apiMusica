@@ -20,7 +20,7 @@ class Users
             array(
                 array(
                     'constraint' => 'claveAjenaUsersARoles',
-                    'key' => 'id_roles',
+                    'key' => 'id_rol',
                     'reference' => array(
                         'table' => 'roles',
                         'column' => 'id',
