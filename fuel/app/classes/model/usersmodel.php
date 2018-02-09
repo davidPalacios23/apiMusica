@@ -2,7 +2,7 @@
 
 class Model_Usersmodel extends Orm\Model
 {
-    protected static $_table_name = 'usuarios';
+    protected static $_table_name = 'users';
     protected static $_primary_key = array('id');
     protected static $_properties = array(
         'id', // both validation & typing observers will ignore the PK
@@ -30,9 +30,6 @@ class Model_Usersmodel extends Orm\Model
         'y' => array(
             'data_type' => 'varchar'
         ),
-        'id_device' => array(
-            'data_type' => 'int'  
-        ),
         'id_rol' => array(
             'data_type' => 'int'
         )          
@@ -43,14 +40,14 @@ class Model_Usersmodel extends Orm\Model
     'lists' => array(
         'key_from' => 'id',
         'model_to' => 'Model_listsmodel',
-        'key_to' => 'id_usuarios',
+        'key_to' => 'id_users',
         'cascade_save' => true,
         'cascade_delete' => false,
     ),
     'news' => array(
         'key_from' => 'id',
         'model_to' => 'Model_newsmodel',
-        'key_to' => 'id_usuarios',
+        'key_to' => 'id_users',
         'cascade_save' => true,
         'cascade_delete' => false,
     )
@@ -70,7 +67,7 @@ class Model_Usersmodel extends Orm\Model
     'privacity' => array(
         'key_from' => 'id',
         'model_to' => 'Model_privacitymodel',
-        'key_to' => 'id_usuarios',
+        'key_to' => 'id_users',
         'cascade_save' => true,
         'cascade_delete' => false,
     )

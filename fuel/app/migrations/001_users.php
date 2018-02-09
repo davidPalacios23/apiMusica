@@ -1,11 +1,11 @@
 <?php 
 namespace Fuel\Migrations;
 
-class Usuarios
+class Users
 {
 	function up()
 	{
-		\DBUtil::create_table('usuarios', array(
+		\DBUtil::create_table('users', array(
             'id' => array('type' => 'int', 'constraint' => 11, 'auto_increment' => true),
             'name' => array('type' => 'varchar', 'constraint' => 100),
             'email' => array('type' => 'varchar', 'constraint' => 100),
@@ -15,11 +15,11 @@ class Usuarios
             'location' => array('type' => 'varchar', 'constraint' => 100),
             'x' => array('type' => 'varchar', 'constraint' => 100),
             'y' => array('type' => 'varchar', 'constraint' => 100),
-            'id_roles' => array('type' => 'int', 'constraint' => 11),
+            'id_rol' => array('type' => 'int', 'constraint' => 11)
         ), array('id'), true, 'InnoDB', 'utf8_general_ci',
             array(
                 array(
-                    'constraint' => 'claveAjenaUsuariosARoles',
+                    'constraint' => 'claveAjenaUsersARoles',
                     'key' => 'id_roles',
                     'reference' => array(
                         'table' => 'roles',
@@ -34,7 +34,7 @@ class Usuarios
 
 	function down()
     {
-       \DBUtil::drop_table('usuarios');
+       \DBUtil::drop_table('users');
     }
 }
 

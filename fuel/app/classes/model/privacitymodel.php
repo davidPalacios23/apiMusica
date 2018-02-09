@@ -18,14 +18,14 @@ class Model_Privacitymodel extends Orm\Model
         'notifications' => array(
             'data_type' => 'varchar'
         ),    
-        'id_usuario' => array(
+        'id_user' => array(
             'data_type' => 'int'
         )          
     );
 
     protected static $_belongs_to = array(
     'users' => array(
-        'key_from' => 'id_usuario',
+        'key_from' => 'id_user',
         'model_to' => 'Model_usersmodel',
         'key_to' => 'id',
         'cascade_save' => true,

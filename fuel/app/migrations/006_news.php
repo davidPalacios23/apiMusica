@@ -2,19 +2,19 @@
 
 namespace Fuel\Migrations;
 
-class Lists
+class News
 {
 
     function up()
     {
-        \DBUtil::create_table('lists', array(
+        \DBUtil::create_table('news', array(
             'id' => array('type' => 'int', 'constraint' => 11, 'auto_increment' => true),
-            'title' => array('type' => 'varchar', 'constraint' => 100),
+            'description' => array('type' => 'varchar', 'constraint' => 200),
             'id_user' => array('type' => 'int', 'constraint' => 11),
         ), array('id'), true, 'InnoDB', 'utf8_general_ci',
             array(
                 array(
-                    'constraint' => 'claveAjenaListsAUsers',
+                    'constraint' => 'claveAjenaNewsAUsers',
                     'key' => 'id_user',
                     'reference' => array(
                         'table' => 'users',
@@ -29,6 +29,6 @@ class Lists
 
     function down()
     {
-       \DBUtil::drop_table('lists');
+       \DBUtil::drop_table('news');
     }
 }

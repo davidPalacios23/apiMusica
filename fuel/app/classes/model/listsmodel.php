@@ -17,7 +17,7 @@ class Model_Listsmodel extends Orm\Model
     //esto está bien
     protected static $_belongs_to = array(
     'users' => array(
-        'key_from' => 'id_usuario',
+        'key_from' => 'id_user',
         'model_to' => 'Model_usersmodel',
         'key_to' => 'id',
         'cascade_save' => true,
