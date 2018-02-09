@@ -15,7 +15,7 @@ class Model_Usersmodel extends Orm\Model
         'email' => array(
             'data_type' => 'varchar'
         ),
-        'drescription' => array(
+        'description' => array(
             'data_type' => 'varchar'
         ),    
         'birthday' => array(

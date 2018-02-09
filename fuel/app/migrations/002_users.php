@@ -10,11 +10,11 @@ class Users
             'name' => array('type' => 'varchar', 'constraint' => 100),
             'email' => array('type' => 'varchar', 'constraint' => 100),
             'password' => array('type' => 'varchar', 'constraint' => 100),
-            'description' => array('type' => 'varchar', 'constraint' => 400),
-            'birthday' => array('type' => 'varchar', 'constraint' => 100),
-            'location' => array('type' => 'varchar', 'constraint' => 100),
-            'x' => array('type' => 'varchar', 'constraint' => 100),
-            'y' => array('type' => 'varchar', 'constraint' => 100),
+            'description' => array('type' => 'varchar', 'constraint' => 400, 'null' => true),
+            'birthday' => array('type' => 'varchar', 'constraint' => 100, 'null' => true),
+            'location' => array('type' => 'varchar', 'constraint' => 100, 'null' => true),
+            'x' => array('type' => 'varchar', 'constraint' => 100, 'null' => true),
+            'y' => array('type' => 'varchar', 'constraint' => 100, 'null' => true),
             'id_rol' => array('type' => 'int', 'constraint' => 11)
         ), array('id'), true, 'InnoDB', 'utf8_general_ci',
             array(
