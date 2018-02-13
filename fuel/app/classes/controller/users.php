@@ -9,7 +9,10 @@ class Controller_Users extends Controller_Rest
     
     public function post_create()
     {
-        try {
+       
+        try 
+        {
+                
             if ( ! isset($_POST['name']) || ! isset($_POST['password']) || ! isset($_POST['email']))
             {
                 $json = $this->response(array(
@@ -25,70 +28,92 @@ class Controller_Users extends Controller_Rest
             $input = $_POST;
             $users = Model_Usersmodel::find('all');
 
+            //se comprueban campos vacios
+
+            if (empty($input['name']) || empty($input['password']) || empty($input['email'])) {
+                $json = $this->response(array(
+                        'code' => 419,
+                        'message' => 'no puede haber parámetros vacíos',
+                        'data' => null,
+                   ));
+                return $json;
+
+            }
+
+            // se comprueba que el usuario introducido no esté en la base de datos    
             foreach ($users as $key => $user) {
-                if ($input['name'] == $user->nombre) {
+                if ($input['name'] == $user->name) {
                     
                     $json = $this->response(array(
                         'code' => 400,
-                        'message' => 'ese nombre ya figura en la lista'
+                        'message' => 'nombre ya en uso'
                     ));
 
                     return $json;    
                 }
             }
+            if (strlen($input['password']) < 6) 
+            {
+                $json = $this->response(array(
+                        'code' => 419,
+                        'message' => 'La contraseña debe tener al menos 6 caracteres',
+                        'data' => null,
+                ));
+                return $json;
+            }
+            //Se valida si el email esta en un formato válido
+            if (!filter_var($input['email'], FILTER_VALIDATE_EMAIL)) 
+            {
+                $json = $this->response(array(
+                        'code' => 419,
+                        'message' => 'El formato de email introducido no es válido',
+                        'data' => null,
+                   ));
+                return $json;
+            }
+            // se comprueba que el email introducido no esté en la base de datos  
             foreach ($users as $key => $user) {
                 if ($input['email'] == $user->email) {
                     
                     $json = $this->response(array(
                         'code' => 400,
-                        'message' => 'ese email ya figura en la lista'
+                        'message' => 'email ya en uso'
                     ));
 
                     return $json;    
                 }
             }
+            /* mirando lo de asignar un rol al primer usuario
+            foreach ($users as $key => $user) {
+                if ($user->id == 0) {
+                    $user = new Model_Usersmodel(); 
+                    $user->name = $input['name'];
+                    $user->password = $input['password'];
+                    $user->email = $input['email'];
+                    $user->rol
+                    $user->save();
+                }*/
+                //se guardan los datos en la base de datos y se devuelve la respuesta
+                $user = new Model_Usersmodel(); 
+                $user->name = $input['name'];
+                $user->password = $input['password'];
+                $user->email = $input['email'];
+                $user->save();
+                
+                $json = $this->response(array(
+                    'code' => 200,
+                    'message' => 'usuario creado',
+                    'name' => $input['name']
+                ));
 
-            /*for ($i=0; $i < count($user); $i++) 
-            { 
-                if ($input['name'] == $i->name) 
-                {
-                    $json = $this->response(array(
-                        'code' => 400,
-                        'message' => 'ese nombre ya figura en la lista'
-                    ));
-
-                    return $json;    
-                }
-                elseif ($input['email'] == $i->email) 
-                {
-                        $json = $this->response(array(
-                        'code' => 400,
-                        'message' => 'ese email ya figura en la lista'
-                    ));
-
-                    return $json;  
-                }
-            }*/
-            $user = new Model_Usersmodel(); 
-            $user->nombre = $input['name'];
-            $user->password = $input['password'];
-            $user->email = $input['email'];
-            $user->save();
-
-            $json = $this->response(array(
-                'code' => 200,
-                'message' => 'usuario creado',
-                'name' => $input['name']
-            ));
-
-            return $json;
+                 return $json;
 
         } 
         catch (Exception $e) 
         {
             $json = $this->response(array(
                 'code' => 500,
-                'message' => $e->getMessage(),
+                'message' => "error interno del servidor",
             ));
 
             return $json;
