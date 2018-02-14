@@ -1,12 +1,11 @@
 <?php
-use \Firebase\JWT\JWT;
 
-class Controller_Users extends Controller_Rest
+
+class Controller_Users extends Controller_Base
 {
 
-
-    private $key = 'posdfnopiwejrmovjdoisjv0`98hgfq2482q84hf078h4f98j23409583240ujelq2';
     
+
     public function post_create()
     {
        
@@ -158,66 +157,94 @@ class Controller_Users extends Controller_Rest
     public function get_checkEmail()
     {
         $input = $_GET;
+        $email = $input['email'];
+        
+        if (empty($email)) {
+            $json = $this->response(array(
+                'code' => 419,
+                'message' => 'debes introducir el email',
+                'data' => null,
+            ));
+            return $json;
+        }
+
+        $user = Model_Usersmodel::find('all', 
+                                 ['where' => 
+                                 ['email' => $email]]);
+
+        if ($user != null){
+            $token = JWT::encode($user, $this->key);
+            $json = $this->response(array(
+                'code' => 200,
+                'message' => 'Email valido',
+                'data' => $token
+            ));
+
+            return $json;
+        }else
+        {
+            
+            $json = $this->response(array(
+                'code' => 419,
+                'message' => 'El email introducido no coincide o no existe',
+                'data' => null,
+            ));
+            return $json;
+        }
+
 
     }
-    public function get_recover_pass(){
+    public function post_recover_pass(){
         
 
-        if ( ! isset($_GET['name']) || ! isset($_GET['email']) ) 
+        $input = $_POST;
+        $password = $input['password'];
+        $repeatPass = $input['repeatPass'];
+        
+        
+
+        if ( ! isset($input['password']) || ! isset($input['repeatPass']) ) 
         {
             $json = $this->response(array(
                 'code' => 400,
-                'message' => 'No han sido agregados todos los parametros necesarios a la llamada',
+                'message' => 'No han sido agregados todos los datos necesarios a la llamada',
                 'data' => null,
             ));
             return $json;
         }
 
         //el siguiente condicional sirve para comprobar que los campos de usuario o email no estén vacíos
-        if (empty($_GET['name']) || empty($_GET['email'])) {
+        if (empty($input['password']) || empty($input['repeatPass'])) {
             $json = $this->response(array(
                 'code' => 419,
-                'message' => 'no puede haber parametros vacios',
+                'message' => 'no puede haber campos vacios',
                 'data' => null,
             ));
             return $json;
         }
-        //Se recogen los datos necesarios para validar al usuario
-        $input = $_GET;   
-        $name = $input['name'];
-        $email = $input['email'];
-        //Se busca en la base de datos el usuario 
-        $user = Model_Users::find('all', 
-                                 ['where' => 
-                                 ['name' => $name, 
-                                  'email' => $email]]);
 
-        if($user != null)
-        {
-            //Se transforman los campos de id y email para enviarlos facilmente
-            foreach ($user as $i => $objUser) {
-                $id = $objUser->id;
-                $pass = $objUser->pass;
-            }   
-            $userToken = ["name" => $name, "pass" => $pass, "email" => $email, "id" => $id];//Se convierten los datos a un array relaccional para gestionar mejor el token
-            //Se codifica el token 
-            $encodedToken = self::encode($userToken);
-            //La respuesta devuelve un código 200 y el token que necesitará para realizar las acciones dentro de la app
+        if ($input['password'] != $input['repeatPass']) {
             $json = $this->response(array(
-                'code' => 200,
-                'message' => 'Usuario validado',
-                'data' => ['token' =>$encodedToken],
-            ));
+                        'code' => 419,
+                        'message' => 'Las contraseñas deben coincidir',
+                        'data' => null,
+                ));
+                return $json;
         }
-        else
-        {
-            //En caso de ser un fallo al introducir los datos el usuario se devuelve un error 419
-            $json = $this->response(array(
-                'code' => 419,
-                'message' => 'El usuario y el email introducidos no son coincidentes o no existen',
-                'data' => null,
-            ));
-        }
+
+       // $decodedToken = self::decodeToken();
+        $user = Model_Users::find($decodedToken->id);
+        $user->password = $input['password'];
+        $user->save();
+
+                
+                $json = $this->response(array(
+                    'code' => 200,
+                    'message' => 'contraseña modificada',
+                    'data' => null,
+                ));
+
+                 return $json;
     }
 
     public function get_login()
@@ -246,19 +273,21 @@ class Controller_Users extends Controller_Rest
         foreach ($users as $key => $user) 
         {
             $user = [
-                'id' => $user->id,
                 'name' => $user->name,
                 'password' => $user->password
             ];
         }
 
-        $token = self::encode($user);
+      
+        $encodedToken = self::encode($userToken);
+
+        //$token = JWT::encode($user, $this->key);
 
              
         $json = $this->response(array(
             'code' => 200,
             'message' => 'login correcto',
-            'data' => $token 
+            'data' => $encodedToken 
         ));
         return $json;
        

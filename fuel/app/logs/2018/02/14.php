@@ -44,3 +44,34 @@ WARNING - 2018-02-14 17:14:40 --> Fuel\Core\Fuel::init - The configured locale e
 WARNING - 2018-02-14 17:14:56 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
 ERROR - 2018-02-14 17:14:56 --> Error - Property "nombre" not found for Model_Usersmodel. in /var/www/html/api/fuelphp/fuel/packages/orm/classes/model.php on line 1188
 WARNING - 2018-02-14 17:16:22 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-14 18:12:03 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-14 18:12:03 --> Error - Class 'Model_Users' not found in /var/www/html/api/fuelphp/fuel/app/classes/controller/users.php on line 172
+WARNING - 2018-02-14 18:12:32 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-14 18:12:32 --> Notice - Use of undefined constant json - assumed 'json' in /var/www/html/api/fuelphp/fuel/app/classes/controller/users.php on line 192
+WARNING - 2018-02-14 18:14:13 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-14 18:14:36 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-14 18:48:49 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-14 18:49:56 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-14 19:09:55 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-14 19:09:55 --> Error - Call to undefined method Controller_Users::encode() in /var/www/html/api/fuelphp/fuel/app/classes/controller/users.php on line 175
+WARNING - 2018-02-14 19:11:38 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-14 19:11:38 --> Error - Call to undefined method Controller_Users::encode() in /var/www/html/api/fuelphp/fuel/app/classes/controller/users.php on line 280
+WARNING - 2018-02-14 19:12:55 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-14 19:12:55 --> Error - Call to undefined method Controller_Users::encode() in /var/www/html/api/fuelphp/fuel/app/classes/controller/users.php on line 280
+WARNING - 2018-02-14 19:19:02 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-14 19:19:02 --> Error - Call to undefined method Controller_Users::encode() in /var/www/html/api/fuelphp/fuel/app/classes/controller/users.php on line 280
+WARNING - 2018-02-14 19:23:11 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-14 19:41:31 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-14 19:41:31 --> Error - Call to undefined method Controller_Users::encode() in /var/www/html/api/fuelphp/fuel/app/classes/controller/users.php on line 282
+WARNING - 2018-02-14 19:45:16 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-14 19:45:16 --> Error - Call to undefined method Controller_Users::encode() in /var/www/html/api/fuelphp/fuel/app/classes/controller/users.php on line 282
+WARNING - 2018-02-14 19:48:48 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-14 19:48:48 --> Fatal Error - Class 'Controller_DataManager' not found in /var/www/html/api/fuelphp/fuel/app/classes/controller/users.php on line 4
+WARNING - 2018-02-14 19:49:15 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-14 19:49:15 --> Fatal Error - Class 'Controller_dataManager' not found in /var/www/html/api/fuelphp/fuel/app/classes/controller/users.php on line 4
+WARNING - 2018-02-14 19:51:17 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-14 19:51:17 --> Fatal Error - Class 'Controller_DataManager' not found in /var/www/html/api/fuelphp/fuel/app/classes/controller/users.php on line 4
+WARNING - 2018-02-14 19:53:32 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-14 19:53:32 --> Fatal Error - Class 'Controller_DataManager' not found in /var/www/html/api/fuelphp/fuel/app/classes/controller/users.php on line 4
+WARNING - 2018-02-14 19:55:48 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-14 19:55:48 --> Notice - Undefined variable: userToken in /var/www/html/api/fuelphp/fuel/app/classes/controller/users.php on line 282

@@ -3,7 +3,7 @@ use \Firebase\JWT\JWT;
 /**
 * 
 */
-class Controller_DataManager extends Controller_Rest
+class Controller_Base extends Controller_Rest
 {
     private $key = "oiuo87i76f87t6uhi8gfg6r565465356436543uyftertewpoj+0okñoilbiuygi";
 
