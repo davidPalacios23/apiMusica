@@ -28,6 +28,7 @@ class Controller_Users extends Controller_Rest
             $input = $_POST;
             $users = Model_Usersmodel::find('all');
 
+
             //se comprueban campos vacios
 
             if (empty($input['name']) || empty($input['password']) || empty($input['email'])) {
@@ -99,6 +100,9 @@ class Controller_Users extends Controller_Rest
                 $user->password = $input['password'];
                 $user->email = $input['email'];
                 $user->save();
+
+                $rol = new Model_Rolesmodel();
+                $rol->type = 'usuario';
                 
                 $json = $this->response(array(
                     'code' => 200,
