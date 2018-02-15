@@ -1,17 +1,17 @@
 <?php
-use \Firebase\JWT\JWT;
 
-class Controller_Users extends Controller_Rest
+
+class Controller_Users extends Controller_Base
 {
 
-
-    private $key = 'posdfnopiwejrmovjdoisjv0`98hgfq2482q84hf078h4f98j23409583240ujelq2';
     
+
     public function post_create()
     {
        
         try 
         {
+            
                 
             if ( ! isset($_POST['name']) || ! isset($_POST['password']) || ! isset($_POST['email']))
             {
@@ -23,15 +23,13 @@ class Controller_Users extends Controller_Rest
                 return $json;
             } 
                 
-            
-
             $input = $_POST;
             $users = Model_Usersmodel::find('all');
 
 
             //se comprueban campos vacios
 
-            if (empty($input['name']) || empty($input['password']) || empty($input['email'])) {
+            if (empty($input['name']) || empty($input['password']) || empty($input['email']) || empty($input['repeatPass'])) {
                 $json = $this->response(array(
                         'code' => 419,
                         'message' => 'no puede haber parámetros vacíos',
@@ -62,6 +60,16 @@ class Controller_Users extends Controller_Rest
                 ));
                 return $json;
             }
+
+            if ($input['password'] != $input['repeatPass']) {
+                $json = $this->response(array(
+                        'code' => 419,
+                        'message' => 'Las contraseñas deben coincidir',
+                        'data' => null,
+                ));
+                return $json;
+            }
+
             //Se valida si el email esta en un formato válido
             if (!filter_var($input['email'], FILTER_VALIDATE_EMAIL)) 
             {
@@ -94,15 +102,32 @@ class Controller_Users extends Controller_Rest
                     $user->rol
                     $user->save();
                 }*/
+                
+                // busco todos los roles cuyo tipo sea 'usuario' y los guardo en rolUser
+                $rolUser = Model_Rolesmodel::find('all', array(
+                    'where' => array(
+                        array('type', 'usuario'),
+                    )
+                ));
+
+                // recorro el array de rolUser y guardo su id en idRol
+                foreach ($rolUser as $key => $rol) 
+                {
+                    $idRol = $rol->id;
+                }
+
                 //se guardan los datos en la base de datos y se devuelve la respuesta
                 $user = new Model_Usersmodel(); 
                 $user->name = $input['name'];
                 $user->password = $input['password'];
                 $user->email = $input['email'];
+                $user->id_rol = $idRol;
                 $user->save();
+
 
                 $rol = new Model_Rolesmodel();
                 $rol->type = 'usuario';
+
                 
                 $json = $this->response(array(
                     'code' => 200,
@@ -118,6 +143,7 @@ class Controller_Users extends Controller_Rest
             $json = $this->response(array(
                 'code' => 500,
                 'message' => "error interno del servidor",
+                'error' => $e->getMessage()
             ));
 
             return $json;
@@ -126,11 +152,105 @@ class Controller_Users extends Controller_Rest
         
     }
 
+
     public function get_users()
     {
     	$users = Model_Usersmodel::find('all');
 
     	return $this->response(Arr::reindex($users));
+    }
+
+    public function get_checkEmail()
+    {
+        $input = $_GET;
+        $email = $input['email'];
+        
+        if (empty($email)) {
+            $json = $this->response(array(
+                'code' => 419,
+                'message' => 'debes introducir el email',
+                'data' => null,
+            ));
+            return $json;
+        }
+
+        $user = Model_Usersmodel::find('all', 
+                                 ['where' => 
+                                 ['email' => $email]]);
+
+        if ($user != null){
+            $token = JWT::encode($user, $this->key);
+            $json = $this->response(array(
+                'code' => 200,
+                'message' => 'Email valido',
+                'data' => $token
+            ));
+
+            return $json;
+        }else
+        {
+            
+            $json = $this->response(array(
+                'code' => 419,
+                'message' => 'El email introducido no coincide o no existe',
+                'data' => null,
+            ));
+            return $json;
+        }
+
+
+    }
+    public function post_recover_pass(){
+        
+
+        $input = $_POST;
+        $password = $input['password'];
+        $repeatPass = $input['repeatPass'];
+        
+        
+
+        if ( ! isset($input['password']) || ! isset($input['repeatPass']) ) 
+        {
+            $json = $this->response(array(
+                'code' => 400,
+                'message' => 'No han sido agregados todos los datos necesarios a la llamada',
+                'data' => null,
+            ));
+            return $json;
+        }
+
+        //el siguiente condicional sirve para comprobar que los campos de usuario o email no estén vacíos
+        if (empty($input['password']) || empty($input['repeatPass'])) {
+            $json = $this->response(array(
+                'code' => 419,
+                'message' => 'no puede haber campos vacios',
+                'data' => null,
+            ));
+            return $json;
+        }
+
+        if ($input['password'] != $input['repeatPass']) {
+            $json = $this->response(array(
+                        'code' => 419,
+                        'message' => 'Las contraseñas deben coincidir',
+                        'data' => null,
+                ));
+                return $json;
+        }
+
+       // $decodedToken = self::decodeToken();
+        $user = Model_Users::find($decodedToken->id);
+        $user->password = $input['password'];
+        $user->save();
+
+                
+                $json = $this->response(array(
+                    'code' => 200,
+                    'message' => 'contraseña modificada',
+                    'data' => null,
+                ));
+
+                 return $json;
     }
 
     public function get_login()
@@ -141,7 +261,7 @@ class Controller_Users extends Controller_Rest
 
         $users = Model_Usersmodel::find('all', array(
             'where' => array(
-                array('nombre', $userName),
+                array('name', $userName),
                 array('password', $userPass)
             )
         ));
@@ -159,19 +279,21 @@ class Controller_Users extends Controller_Rest
         foreach ($users as $key => $user) 
         {
             $user = [
-                'id' => $user->id,
-                'nombre' => $user->nombre,
+                'name' => $user->name,
                 'password' => $user->password
             ];
         }
 
-        $token = JWT::encode($user, $this->key);
+      
+        $encodedToken = self::encode($userToken);
+
+        //$token = JWT::encode($user, $this->key);
 
              
         $json = $this->response(array(
             'code' => 200,
             'message' => 'login correcto',
-            'data' => $token 
+            'data' => $encodedToken 
         ));
         return $json;
        
@@ -180,7 +302,7 @@ class Controller_Users extends Controller_Rest
     public function post_delete()
     {
         $user = Model_Usersmodel::find($_POST['id']);
-        $userName = $user->nombre;
+        $userName = $user->name;
         $user->delete();
 
         $json = $this->response(array(
