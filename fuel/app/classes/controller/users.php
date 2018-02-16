@@ -11,7 +11,6 @@ class Controller_Users extends Controller_Base
        
         try 
         {
-            
                 
             if ( ! isset($_POST['name']) || ! isset($_POST['password']) || ! isset($_POST['email']))
             {
@@ -26,7 +25,6 @@ class Controller_Users extends Controller_Base
             $input = $_POST;
             $users = Model_Usersmodel::find('all');
 
-
             //se comprueban campos vacios
 
             if (empty($input['name']) || empty($input['password']) || empty($input['email']) || empty($input['repeatPass'])) {
@@ -36,7 +34,6 @@ class Controller_Users extends Controller_Base
                         'data' => null,
                    ));
                 return $json;
-
             }
 
             // se comprueba que el usuario introducido no esté en la base de datos    
@@ -92,16 +89,6 @@ class Controller_Users extends Controller_Base
                     return $json;    
                 }
             }
-            /* mirando lo de asignar un rol al primer usuario
-            foreach ($users as $key => $user) {
-                if ($user->id == 0) {
-                    $user = new Model_Usersmodel(); 
-                    $user->name = $input['name'];
-                    $user->password = $input['password'];
-                    $user->email = $input['email'];
-                    $user->rol
-                    $user->save();
-                }*/
                 
                 // busco todos los roles cuyo tipo sea 'usuario' y los guardo en rolUser
                 $rolUser = Model_Rolesmodel::find('all', array(
@@ -125,8 +112,8 @@ class Controller_Users extends Controller_Base
                 $user->save();
 
 
-                $rol = new Model_Rolesmodel();
-                $rol->type = 'usuario';
+                //$rol = new Model_Rolesmodel();
+                //$rol->type = 'usuario';
 
                 
                 $json = $this->response(array(
@@ -179,7 +166,21 @@ class Controller_Users extends Controller_Base
                                  ['email' => $email]]);
 
         if ($user != null){
-            $token = JWT::encode($user, $this->key);
+
+            foreach ($user as $i => $objUser) {
+                $id = $objUser->id;
+                $password = $objUser->password;
+                $birthday = $objUser->birthday;
+                $description = $objUser->description;
+                $location = $objUser->location;
+                $x = $objUser->x;
+                $y = $objUser->y;
+                $name = $objUser->name;
+                $rolId = $objUser->id_rol;
+
+            }   
+            $userToken = ["name" => $name, "password" => $password, "email" => $email, "id" => $id, "birthday" => $birthday, "description" => $description, "location" => $location, "x" => $x, "y" => $y, "id_rol" => $rolId];
+            $token = self::encode($userToken);
             $json = $this->response(array(
                 'code' => 200,
                 'message' => 'Email valido',
@@ -200,57 +201,70 @@ class Controller_Users extends Controller_Base
 
 
     }
-    public function post_recover_pass(){
+    public function post_recoverPass(){
         
 
         $input = $_POST;
         $password = $input['password'];
         $repeatPass = $input['repeatPass'];
         
+        $auth = self::authenticate();
         
-
-        if ( ! isset($input['password']) || ! isset($input['repeatPass']) ) 
+        if($auth == true)
         {
-            $json = $this->response(array(
-                'code' => 400,
-                'message' => 'No han sido agregados todos los datos necesarios a la llamada',
-                'data' => null,
-            ));
-            return $json;
-        }
 
-        //el siguiente condicional sirve para comprobar que los campos de usuario o email no estén vacíos
-        if (empty($input['password']) || empty($input['repeatPass'])) {
-            $json = $this->response(array(
-                'code' => 419,
-                'message' => 'no puede haber campos vacios',
-                'data' => null,
-            ));
-            return $json;
-        }
-
-        if ($input['password'] != $input['repeatPass']) {
-            $json = $this->response(array(
-                        'code' => 419,
-                        'message' => 'Las contraseñas deben coincidir',
-                        'data' => null,
-                ));
-                return $json;
-        }
-
-       // $decodedToken = self::decodeToken();
-        $user = Model_Users::find($decodedToken->id);
-        $user->password = $input['password'];
-        $user->save();
-
-                
+            if ( ! isset($input['password']) || ! isset($input['repeatPass']) ) 
+            {
                 $json = $this->response(array(
-                    'code' => 200,
-                    'message' => 'contraseña modificada',
+                    'code' => 400,
+                    'message' => 'No han sido agregados todos los datos necesarios a la llamada',
                     'data' => null,
                 ));
+                return $json;
+            }
 
-                 return $json;
+            //el siguiente condicional sirve para comprobar que los campos de usuario o email no estén vacíos
+            if (empty($input['password']) || empty($input['repeatPass'])) {
+                $json = $this->response(array(
+                    'code' => 419,
+                    'message' => 'no puede haber campos vacios',
+                    'data' => null,
+                ));
+                return $json;
+            }
+
+            if ($input['password'] != $input['repeatPass']) {
+                $json = $this->response(array(
+                            'code' => 419,
+                            'message' => 'Las contraseñas deben coincidir',
+                            'data' => null,
+                    ));
+                    return $json;
+            }
+
+            $decodedToken = self::decodeToken();
+            $user = Model_Usersmodel::find($decodedToken->id);
+            $user->password = $input['password'];
+            $user->save();
+
+                    
+                    $json = $this->response(array(
+                        'code' => 200,
+                        'message' => 'contraseña modificada',
+                        'data' => null,
+                    ));
+
+                     return $json;
+        } 
+        else
+        {
+            //Se devuelve una respuesta 401 en caso de no haber podido ser autenticado
+            $json = $this->response(array(
+                'code' => 401,
+                'message' => 'No ha podido ser autenticado',
+                'data' => null,
+            ));
+        }        
     }
 
     public function get_login()

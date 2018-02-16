@@ -90,7 +90,7 @@ class Controller_Base extends Controller_Rest
             {
                 $decodedToken = self::decode($token);
                 
-                $query = Model_Users::find('all', 
+                $query = Model_Usersmodel::find('all', 
                     ['where' => ['name' => $decodedToken->name, 
                                  'password' => $decodedToken->password, 
                                 ]]);
