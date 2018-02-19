@@ -1,7 +1,7 @@
 <?php
 use \Firebase\JWT\JWT;
 
-class Controller_Songs extends Controller_Rest
+class Controller_Songs extends Controller_Base
 {
 
 
@@ -10,31 +10,41 @@ class Controller_Songs extends Controller_Rest
     public function post_create()
     {
         try {
-            if ( ! isset($_POST['name']) || ! isset($_POST['password']))
+
+            $auth = self::authenticate();
+        
+            if($auth == true)
             {
-                $json = $this->response(array(
-                    'code' => 400,
-                    'message' => 'parametros incorrectos'
-                ));
+                $decodedToken = self::decodeToken();
+                $user = Model_Usersmodel::find($decodedToken->id);
+                if ($user->id_rol != 9)
+                {
+                    $json = $this->response(array(
+                        'code' => 400,
+                        'message' => 'usuario sin permisos'
+                    ));
 
-                return $json;
+                    return $json;
+                }else
+                {
+                    $input = $_POST;
+                    $song = new Model_Songsmodel();
+                    $song->name = $input['name'];
+                    $song->url = $input['url'];
+                    $song->save();
+
+                    $json = $this->response(array(
+                        'code' => 200,
+                        'message' => 'canción creada',
+                        'name' => $input['name']
+                    ));
+
+                    return $json;
+                }
+
             }
+        }     
 
-            $input = $_POST;
-            $user = new Model_Usersmodel();
-            $user->nombre = $input['name'];
-            $user->password = $input['password'];
-            $user->save();
-
-            $json = $this->response(array(
-                'code' => 200,
-                'message' => 'usuario creado',
-                'name' => $input['name']
-            ));
-
-            return $json;
-
-        } 
         catch (Exception $e) 
         {
             $json = $this->response(array(

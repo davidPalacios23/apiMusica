@@ -1,6 +1,6 @@
 <?php 
 
-class Model_songsmodel extends Orm\Model
+class Model_Songsmodel extends Orm\Model
 {
     protected static $_table_name = 'songs';
     protected static $_primary_key = array('id');

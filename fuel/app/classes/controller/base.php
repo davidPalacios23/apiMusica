@@ -26,16 +26,16 @@ class Controller_Base extends Controller_Rest
                         )
                     ));
 
-                    // recorro el array de rolUser y guardo su id en idRol
+                    // recorro el array del rol de tipo administrador y guardo su id en idRol
                     foreach ($rolAdminId as $key => $rol) 
                     {
                         $idRol = $rol->id;
                     }
 
             $user = new Model_Usersmodel(); 
-                    $user->name = $this->encode("David");
-                    $user->password = $this->encode("123456");
-                    $user->email = $this->encode("davidpalacios23@hotmail.com");
+                    $user->name = "admin"; //quito el codificar los datos para probar mas comodamente la creacion de canciones.
+                    $user->password = "123456";
+                    $user->email = "admin@admin.es";
                     $user->id_rol = $idRol;
                     $user->save();
 

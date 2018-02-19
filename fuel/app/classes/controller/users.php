@@ -299,7 +299,7 @@ class Controller_Users extends Controller_Base
         }
 
       
-        $encodedToken = self::encode($userToken);
+        $encodedToken = self::encode($user);
 
         //$token = JWT::encode($user, $this->key);
 
