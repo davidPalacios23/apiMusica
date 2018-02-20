@@ -17,7 +17,31 @@ class Controller_Songs extends Controller_Base
             {
                 $decodedToken = self::decodeToken();
                 $user = Model_Usersmodel::find($decodedToken->id);
-                if ($user->id_rol != 9)
+                    
+
+                if ( ! isset($_POST['name']) || ! isset($_POST['url']))
+                {
+                    $json = $this->response(array(
+                        'code' => 400,
+                        'message' => 'parametros incorrectos'
+                   ));
+
+                    return $json;
+                }
+
+                $input = $_POST;
+
+                if (empty($input['name']) || empty($input['url'])
+                {
+                    $json = $this->response(array(
+                            'code' => 419,
+                            'message' => 'no puede haber campos vacíos',
+                            'data' => null,
+                    ));
+                    return $json;
+                }
+                    
+                if ($user->id_rol != 11) //en este caso es 11 porque al ser autoincremental, el id va subiendo aunque borres los roles de la bbdd, pero cuando funcione bien será el numero 2
                 {
                     $json = $this->response(array(
                         'code' => 400,
@@ -25,9 +49,12 @@ class Controller_Songs extends Controller_Base
                     ));
 
                     return $json;
-                }else
+                }
+
+
+                else
                 {
-                    $input = $_POST;
+                    
                     $song = new Model_Songsmodel();
                     $song->name = $input['name'];
                     $song->url = $input['url'];
@@ -58,67 +85,25 @@ class Controller_Songs extends Controller_Base
         
     }
 
-    public function get_users()
+    public function get_songs()
     {
-    	$users = Model_Usersmodel::find('all');
+    	$songs = Model_Songsmodel::find('all');
 
-    	return $this->response(Arr::reindex($users));
+    	return $this->response(Arr::reindex($songs));
     }
 
-    public function get_login()
-    {
-        
-        $userName = $_GET['name'];
-        $userPass = $_GET['password'];
-
-        $users = Model_Usersmodel::find('all', array(
-            'where' => array(
-                array('nombre', $userName),
-                array('password', $userPass)
-            )
-        ));
-
-        if (empty($users)) 
-        {
-            $json = $this->response(array(
-                'code' => 400,
-                'message' => 'fallo autenticacion',
-                'data' => '' 
-            ));
-            return $json;
-        }
-
-        foreach ($users as $key => $user) 
-        {
-            $user = [
-                'id' => $user->id,
-                'nombre' => $user->nombre,
-                'password' => $user->password
-            ];
-        }
-
-        $token = JWT::encode($user, $this->key);
-
-             
-        $json = $this->response(array(
-            'code' => 200,
-            'message' => 'login correcto',
-            'data' => $token 
-        ));
-        return $json;
-       
-    }
+    
 
     public function post_delete()
     {
-        $user = Model_Usersmodel::find($_POST['id']);
-        $userName = $user->nombre;
-        $user->delete();
+        $song = Model_Songsmodel::find($_POST['id']);
+        $songName = $song->name;
+        $song->delete();
 
         $json = $this->response(array(
             'code' => 200,
-            'message' => 'usuario borrado',
-            'name' => $userName
+            'message' => 'cancion borrada',
+            'name' => $songName
         ));
 
         return $json;

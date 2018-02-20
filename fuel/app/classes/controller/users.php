@@ -290,27 +290,28 @@ class Controller_Users extends Controller_Base
             return $json;
         }
 
-        foreach ($users as $key => $user) 
-        {
-            $user = [
-                'name' => $user->name,
-                'password' => $user->password
-            ];
-        }
+        foreach ($users as $i => $objUser) {
+                $id = $objUser->id;
+                $password = $objUser->password;
+                $birthday = $objUser->birthday;
+                $description = $objUser->description;
+                $location = $objUser->location;
+                $email = $objUser->email;
+                $x = $objUser->x;
+                $y = $objUser->y;
+                $name = $objUser->name;
+                $rolId = $objUser->id_rol;
 
-      
-        $encodedToken = self::encode($user);
-
-        //$token = JWT::encode($user, $this->key);
-
-             
-        $json = $this->response(array(
+            }   
+            $userToken = ["name" => $name, "password" => $password, "email" => $email, "id" => $id, "birthday" => $birthday, "description" => $description, "location" => $location, "x" => $x, "y" => $y, "id_rol" => $rolId];
+            $encodedToken = self::encode($userToken);
+            $json = $this->response(array(
             'code' => 200,
             'message' => 'login correcto',
             'data' => $encodedToken 
         ));
         return $json;
-       
+
     }
 
     public function post_delete()
