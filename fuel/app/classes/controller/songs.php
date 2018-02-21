@@ -31,7 +31,7 @@ class Controller_Songs extends Controller_Base
 
                 $input = $_POST;
 
-                if (empty($input['name']) || empty($input['url'])
+                if (empty($input['name']) || empty($input['url']))
                 {
                     $json = $this->response(array(
                             'code' => 419,
@@ -41,7 +41,7 @@ class Controller_Songs extends Controller_Base
                     return $json;
                 }
                     
-                if ($user->id_rol != 11) //en este caso es 11 porque al ser autoincremental, el id va subiendo aunque borres los roles de la bbdd, pero cuando funcione bien será el numero 2
+                if ($user->id_rol != 2) //esto es mejorable
                 {
                     $json = $this->response(array(
                         'code' => 400,

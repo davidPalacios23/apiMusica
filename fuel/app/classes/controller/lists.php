@@ -1,40 +1,97 @@
 <?php
 use \Firebase\JWT\JWT;
 
-class Controller_Lists extends Controller_Rest
+class Controller_Lists extends Controller_Base
 {
 
 
-    private $key = 'posdfnopiwejrmovjdoisjv0`98hgfq2482q84hf078h4f98j23409583240ujelq2';
-    
     public function post_create()
     {
         try {
-            if ( ! isset($_POST['name']) || ! isset($_POST['password']))
+
+            $auth = self::authenticate();
+        
+            if($auth == true)
             {
+                $decodedToken = self::decodeToken();
+                $user = Model_Usersmodel::find($decodedToken->id);
+                    
+
+                if ( ! isset($_POST['title']))
+                {
+                    $json = $this->response(array(
+                        'code' => 400,
+                        'message' => 'parametros incorrectos'
+                   ));
+
+                    return $json;
+                }
+
+                $input = $_POST;
+
+                if ($user->id_rol != 1) //esto es mejorable
+                {
+                    $json = $this->response(array(
+                        'code' => 400,
+                        'message' => 'usuario sin permisos'
+                    ));
+
+                    return $json;
+                }
+
+                if (empty($input['title']))
+                {
+                    $json = $this->response(array(
+                            'code' => 419,
+                            'message' => 'debes introducir un título para la lista',
+                            'data' => null,
+                    ));
+                    return $json;
+                }
+
+
+                //busco todas las listas del usuario en cuestión...
+                $userLists = Model_Listsmodel::find('all', array(
+                        'where' => array(
+                            array('id_user', $user->id),
+                        )
+                    ));
+
+                
+                    // ... y compruebo que el nombre introducido no coincide con ninguno ya establecido
+                    foreach ($userLists as $key => $list) {
+                        if ($input['title'] == $list->title) 
+                        {
+                            
+                            $json = $this->response(array(
+                                'code' => 400,
+                                'message' => 'esa lista ya existe'
+                            ));
+
+                            return $json;    
+                        }
+                    }    
+                
+                
+                
+                    
+                $list = new Model_Listsmodel();
+                $list->title = $input['title'];
+                $list->id_user = $user->id;
+                $list->save();
+
                 $json = $this->response(array(
-                    'code' => 400,
-                    'message' => 'parametros incorrectos'
+                    'code' => 200,
+                    'message' => 'lista creada',
+                    'name' => $input['title']
                 ));
 
                 return $json;
+                
+
             }
+        }     
 
-            $input = $_POST;
-            $user = new Model_Usersmodel();
-            $user->nombre = $input['name'];
-            $user->password = $input['password'];
-            $user->save();
-
-            $json = $this->response(array(
-                'code' => 200,
-                'message' => 'usuario creado',
-                'name' => $input['name']
-            ));
-
-            return $json;
-
-        } 
         catch (Exception $e) 
         {
             $json = $this->response(array(

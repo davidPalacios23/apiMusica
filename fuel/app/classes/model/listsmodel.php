@@ -9,7 +9,7 @@ class Model_Listsmodel extends Orm\Model
         'title' => array(
             'data_type' => 'varchar'
         ),
-        'id_usuario' => array(
+        'id_user' => array(
             'data_type' => 'int'
         )
         

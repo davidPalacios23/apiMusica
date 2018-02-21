@@ -11,6 +11,9 @@ class Model_Songsmodel extends Orm\Model
         ),
         'url' => array(
         	'data_type' => 'varchar'
+        ),
+        'playsnumber' => array(
+            'data_type' => 'int'
         )
     );
 
