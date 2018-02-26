@@ -1,17 +1,17 @@
 <?php 
 namespace Fuel\Migrations;
 
-class Follow
+class Follower_followed
 {
     function up()
     {
-        \DBUtil::create_table('follow', array(
+        \DBUtil::create_table('follower_followed', array(
             'id_follower' => array('type' => 'int', 'constraint' => 11),
             'id_followed' => array('type' => 'int', 'constraint' => 11)
         ), array('id_follower','id_followed'), true, 'InnoDB', 'utf8_general_ci',
             array(
                 array(
-                    'constraint' => 'claveAjenaFollowAFollower',
+                    'constraint' => 'claveAjenaFollowerFollowedAFollower',
                     'key' => 'id_follower',
                     'reference' => array(
                         'table' => 'users',
@@ -20,7 +20,7 @@ class Follow
                     'on_update' => 'CASCADE',
                     'on_delete' => 'RESTRICT'
                 ),array(
-                    'constraint' => 'claveAjenaFollowAFollowed',
+                    'constraint' => 'claveAjenaFollowerFollowedAFollowed',
                     'key' => 'id_followed',
                     'reference' => array(
                         'table' => 'users',
@@ -35,7 +35,7 @@ class Follow
 
     function down()
     {
-       \DBUtil::drop_table('follow');
+       \DBUtil::drop_table('follower_followed');
     }
 }
 

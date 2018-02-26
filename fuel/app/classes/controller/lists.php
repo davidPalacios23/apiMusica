@@ -73,8 +73,6 @@ class Controller_Lists extends Controller_Base
                     }    
                 
                 
-                
-                    
                 $list = new Model_Listsmodel();
                 $list->title = $input['title'];
                 $list->id_user = $user->id;
@@ -152,25 +150,21 @@ class Controller_Lists extends Controller_Base
                 }
 
                 //compruebo que la canción existe en la bbdd
-                $songs = Model_Songsmodel::find('all', array(
+                $song = Model_Songsmodel::find('all', array(
                         'where' => array(
                             array('name', $input['songName']),
                         )
                 ));
-
-                foreach ($songs as $key => $song) 
-                {
-                        if ($input['songName'] != $song->name) 
-                        {
-                            
-                            $json = $this->response(array(
+                
+                if (empty($song)) {
+                    $json = $this->response(array(
                                 'code' => 400,
                                 'message' => 'esa canción no existe'
                             ));
 
                             return $json;    
-                        }
-                }    
+                }
+                
 
 
                 //busco todas las listas del usuario en cuestión...
@@ -180,9 +174,10 @@ class Controller_Lists extends Controller_Base
                         )
                     ));
 
-                
+
                     // ... y compruebo que el nombre introducido coincide con alguna lista de ese usuario
                     foreach ($userLists as $key => $list) {
+                        
                         if ($input['list'] != $list->title) 
                         {
                             
@@ -192,35 +187,37 @@ class Controller_Lists extends Controller_Base
                             ));
 
                             return $json;    
+                        }elseif ($input['list'] == $list->title) {
+                            $listId = $list->id;
                         }
 
-                    } 
+                    }
 
-                
-
-
-
-                
-                
-                
-                
-                    
-                $list = new Model_Listsmodel();
-                $list->title = $input['title'];
-                $list->id_user = $user->id;
+                $list = Model_Listsmodel::find($listId);
+                $list->songs[$song->id] = Model_Songsmodel::find($song->id);
                 $list->save();
 
                 $json = $this->response(array(
                     'code' => 200,
-                    'message' => 'lista creada',
-                    'name' => $input['title']
+                    'message' => 'cancion añadida a la lista',
+                    'data' => null
                 ));
 
                 return $json;
                 
-
             }
-    }
+        }    
+            catch (Exception $e) 
+            {
+                $json = $this->response(array(
+                    'code' => 500,
+                    'message' => 'error interno del servidor',
+                ));
+
+                return $json;
+            }
+    
+}
 
     public function get_lists()
     {
