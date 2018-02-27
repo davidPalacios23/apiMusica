@@ -31,3 +31,8 @@ WARNING - 2018-02-26 18:30:27 --> Fuel\Core\Fuel::init - The configured locale e
 WARNING - 2018-02-26 18:31:00 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
 WARNING - 2018-02-26 18:31:33 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
 WARNING - 2018-02-26 18:36:27 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-26 19:33:16 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-26 19:34:10 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-26 19:34:14 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-26 19:34:16 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-26 19:36:46 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.

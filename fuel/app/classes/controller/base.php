@@ -7,7 +7,7 @@ class Controller_Base extends Controller_Rest
 {
     private $key = "oiuo87i76f87t6uhi8gfg6r565465356436543uyftertewpoj+0okñoilbiuygi";
 
-    //debo ver como llamar a esta funcion al iniciar la aplicación
+   
     public function post_createRolTypes(){
 
         try{

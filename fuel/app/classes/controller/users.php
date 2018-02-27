@@ -11,7 +11,7 @@ class Controller_Users extends Controller_Base
        
         try 
         {
-                
+             //se controla que los datos estén definidos   
             if ( ! isset($_POST['name']) || ! isset($_POST['password']) || ! isset($_POST['email']))
             {
                 $json = $this->response(array(
@@ -48,6 +48,8 @@ class Controller_Users extends Controller_Base
                     return $json;    
                 }
             }
+
+            //se comprueba que la contraseña tenga al menos 6 caracteres
             if (strlen($input['password']) < 6) 
             {
                 $json = $this->response(array(
@@ -57,7 +59,7 @@ class Controller_Users extends Controller_Base
                 ));
                 return $json;
             }
-
+            // se comprueba que al repetir las contraseñas, sean iguales
             if ($input['password'] != $input['repeatPass']) {
                 $json = $this->response(array(
                         'code' => 419,
@@ -111,10 +113,6 @@ class Controller_Users extends Controller_Base
                 $user->id_rol = $idRol;
                 $user->save();
 
-
-                //$rol = new Model_Rolesmodel();
-                //$rol->type = 'usuario';
-
                 
                 $json = $this->response(array(
                     'code' => 200,
@@ -152,6 +150,7 @@ class Controller_Users extends Controller_Base
         $input = $_GET;
         $email = $input['email'];
         
+        //se comprueba que no haya campos vacios
         if (empty($email)) {
             $json = $this->response(array(
                 'code' => 419,
@@ -190,7 +189,7 @@ class Controller_Users extends Controller_Base
             return $json;
         }else
         {
-            
+            //se comprueba que el email exista y coincida con el escrito por el usuario
             $json = $this->response(array(
                 'code' => 419,
                 'message' => 'El email introducido no coincide o no existe',
@@ -212,7 +211,7 @@ class Controller_Users extends Controller_Base
         
         if($auth == true)
         {
-
+            //se controla que los datos estén definidos
             if ( ! isset($input['password']) || ! isset($input['repeatPass']) ) 
             {
                 $json = $this->response(array(
@@ -232,7 +231,7 @@ class Controller_Users extends Controller_Base
                 ));
                 return $json;
             }
-
+            //se comprueba que las contraseñas coincidan para evitar errores de escritura
             if ($input['password'] != $input['repeatPass']) {
                 $json = $this->response(array(
                             'code' => 419,
@@ -280,10 +279,11 @@ class Controller_Users extends Controller_Base
             )
         ));
 
+        //se comprueba que las credenciales introducidas son correctas y ese usuario existe en la bbdd
         if (empty($users)) 
         {
             $json = $this->response(array(
-                'code' => 400,
+                'code' => 401,
                 'message' => 'fallo autenticacion',
                 'data' => '' 
             ));

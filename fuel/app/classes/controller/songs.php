@@ -10,7 +10,7 @@ class Controller_Songs extends Controller_Base
     public function post_create()
     {
         try {
-
+            //control de autenticación del token, si es el usuario logueado, entonces se puede acceder al endpoint
             $auth = self::authenticate();
         
             if($auth == true)
@@ -18,18 +18,20 @@ class Controller_Songs extends Controller_Base
                 $decodedToken = self::decodeToken();
                 $user = Model_Usersmodel::find($decodedToken->id);
                     
-
+                //se controla que los datos estén definidos 
                 if ( ! isset($_POST['name']) || ! isset($_POST['url']))
                 {
                     $json = $this->response(array(
                         'code' => 400,
-                        'message' => 'parametros incorrectos'
+                        'message' => 'no han sido agregados todos los datos necesarios a la llamada'
                    ));
 
                     return $json;
                 }
 
                 $input = $_POST;
+
+                //se controla que los campos no estén vacíos
 
                 if (empty($input['name']) || empty($input['url']))
                 {
@@ -40,7 +42,7 @@ class Controller_Songs extends Controller_Base
                     ));
                     return $json;
                 }
-                    
+                 //se controla que solo un usuario con rol de administrador pueda crear canciones   
                 if ($user->id_rol != 2) //esto es mejorable
                 {
                     $json = $this->response(array(

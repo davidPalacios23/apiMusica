@@ -8,7 +8,7 @@ class Controller_Lists extends Controller_Base
     public function post_create()
     {
         try {
-
+            //control de autenticación del token, si es el usuario logueado, entonces se puede acceder al endpoint
             $auth = self::authenticate();
         
             if($auth == true)
@@ -16,19 +16,19 @@ class Controller_Lists extends Controller_Base
                 $decodedToken = self::decodeToken();
                 $user = Model_Usersmodel::find($decodedToken->id);
                     
-
+                //se controla que los datos estén definidos
                 if ( ! isset($_POST['title']))
                 {
                     $json = $this->response(array(
                         'code' => 400,
-                        'message' => 'parametros incorrectos'
+                        'message' => 'no han sido agregados todos los datos necesarios a la llamada'
                    ));
 
                     return $json;
                 }
 
                 $input = $_POST;
-
+                //se controla que el usuario tenga el rol adecuado para poder hacer la petición
                 if ($user->id_rol != 1) //esto es mejorable
                 {
                     $json = $this->response(array(
@@ -38,7 +38,7 @@ class Controller_Lists extends Controller_Base
 
                     return $json;
                 }
-
+                //se controla que se introduzcan los datos necesarios y que no pueda haber campos vacios
                 if (empty($input['title']))
                 {
                     $json = $this->response(array(
@@ -64,8 +64,9 @@ class Controller_Lists extends Controller_Base
                         {
                             
                             $json = $this->response(array(
-                                'code' => 400,
-                                'message' => 'esa lista ya existe'
+                                'code' => 419,
+                                'message' => 'esa lista ya existe',
+                                'data' => 'null'
                             ));
 
                             return $json;    
