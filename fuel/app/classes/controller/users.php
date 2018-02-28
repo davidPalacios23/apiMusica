@@ -16,7 +16,7 @@ class Controller_Users extends Controller_Base
             {
                 $json = $this->response(array(
                     'code' => 400,
-                    'message' => 'parametros incorrectos'
+                    'message' => 'no han sido agregados todos los datos necesarios a la llamada'
                 ));
 
                 return $json;
@@ -30,7 +30,7 @@ class Controller_Users extends Controller_Base
             if (empty($input['name']) || empty($input['password']) || empty($input['email']) || empty($input['repeatPass'])) {
                 $json = $this->response(array(
                         'code' => 419,
-                        'message' => 'no puede haber parámetros vacíos',
+                        'message' => 'no puede haber campos vacíos',
                         'data' => null,
                    ));
                 return $json;
