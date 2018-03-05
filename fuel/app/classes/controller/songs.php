@@ -91,7 +91,15 @@ class Controller_Songs extends Controller_Base
     {
     	$songs = Model_Songsmodel::find('all');
 
-    	return $this->response(Arr::reindex($songs));
+    	//return $this->response(Arr::reindex($songs));
+
+        $json = $this->response(array(
+                'code' => 200,
+                'message' => 'lista de canciones',
+                'data'=> Arr::reindex($songs)
+            ));
+
+            return $json;
     }
 
     
