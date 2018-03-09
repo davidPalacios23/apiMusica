@@ -304,7 +304,7 @@ class Controller_Users extends Controller_Base
 
             }   
             $userToken = ["name" => $name, "password" => $password, "email" => $email, "id" => $id, "birthday" => $birthday, "description" => $description, "location" => $location, "x" => $x, "y" => $y, "id_rol" => $rolId];
-            $encodedToken = self::encode($userToken);
+            $encodedToken = ["token" => self::encode($userToken)];
             $json = $this->response(array(
             'code' => 200,
             'message' => 'login correcto',
